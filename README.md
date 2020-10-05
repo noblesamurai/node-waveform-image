@@ -12,14 +12,14 @@ const waveformImage = require('waveform-image');
 (async () => {
 	try {
     // These binaries must exist on the system.  If you don't pass the paths
-    // in, it'll try and use `ffmpeg` and `ffprobe` in the path.
+    // in, it'll try and use ffmpeg and ffprobe in the path.
     const ffmpegPath = '/custom/path/ffmpeg';
     const ffProbePath = '/custom/path/ffprobe';
-		await waveformImage('/path/to/file.wav', '/path/to/output/image.png', { ffmpegPath, ffprobePath });
+      await waveformImage('/path/to/file.wav', '/path/to/output/image.png', { ffmpegPath, ffprobePath });
     // '/path/to/output/image.png' should now exist
 	} catch (error) {
     // something went wrong
-		console.error(error);
+    console.error(error);
 	}
 })();
 ```
@@ -38,6 +38,7 @@ Type: `object`
 ##### ffprobePath
 
 Type: `string`
+
 Default: The binary found in the `PATH` will be used.
 
 The path to the `ffprobe` binary to use.
@@ -45,6 +46,7 @@ The path to the `ffprobe` binary to use.
 ##### ffmpegPath
 
 Type: `string`
+
 Default: The binary found in the `PATH` will be used.
 
 The path to the `ffmpeg` binary to use.
