@@ -31,7 +31,7 @@ describe('image', function () {
     const input = path.join(__dirname, 'fixtures/zero-length.opus');
     const output = path.join(temporaryDir, 'out-zero-length.png');
 
-    expect(image(input, output)).to.eventually.be.rejectedWith(Error);
+    await expect(image(input, output)).to.be.rejectedWith(Error, 'Invalid data found');
   });
 
   it('should error cleanly for bad input', async () => {
@@ -39,6 +39,6 @@ describe('image', function () {
     const input = path.join(__dirname, 'fixtures/bad.opus');
     const output = path.join(temporaryDir, 'out-bad.png');
 
-    expect(image(input, output)).to.eventually.be.rejectedWith(Error);
+    await expect(image(input, output)).to.be.rejectedWith(Error, 'failed to parse');
   });
 });
