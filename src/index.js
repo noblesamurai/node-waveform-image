@@ -3,31 +3,12 @@ const debug = require('debug')('ns-audio:image');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const gnuplot = commandExists('gnuplot') ? 'gnuplot' : 'gnuplot-nox';
-const path = require('path');
 const pEvent = require('p-event');
-const request = require('request');
 const spawn = require('child_process').spawn;
 const tmp = require('temp');
 
 ffmpeg.setFfmpegPath(require('ffmpeg-static'));
 ffmpeg.setFfprobePath(require('ffprobe-static').path);
-
-function _getLocalFile (input) {
-  return new Promise((resolve, reject) => {
-    if (!/^https?:/.test(input)) {
-      resolve(input);
-      return;
-    }
-
-    // Download file...
-    const temporaryDir = tmp.mkdirSync('ns-audio'); // New temp dir each time incase of name conflicts
-    const filename = path.resolve(temporaryDir, path.basename(input));
-    const file = fs.createWriteStream(filename);
-    file.on('finish', () => resolve(filename));
-    file.on('error', reject);
-    request.get(input).pipe(file);
-  });
-}
 
 function _getDuration (filename) {
   return new Promise((resolve, reject) => {
@@ -67,13 +48,12 @@ function plotArgs (output, width) {
  */
 async function waveFormImage (input, output) {
   const ffmpegOutput = tmp.path();
-  const filename = await _getLocalFile(input);
-  const duration = await _getDuration(filename);
+  const duration = await _getDuration(input);
   const width = Math.round(duration * 100);
 
   await new Promise((resolve, reject) => {
     const command = ffmpeg()
-      .input(filename)
+      .input(input)
       .withAudioCodec('pcm_s16le')
       .withAudioChannels(1)
       .withAudioFrequency(2000)
