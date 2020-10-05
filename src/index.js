@@ -1,10 +1,11 @@
-const debug = require('debug')('ns-audio:image');
-const request = require('request');
-const path = require('path');
-const fs = require('fs');
-const ffmpeg = require('fluent-ffmpeg');
 const commandExists = require('command-exists').sync;
+const debug = require('debug')('ns-audio:image');
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
 const gnuplot = commandExists('gnuplot') ? 'gnuplot' : 'gnuplot-nox';
+const path = require('path');
+const pEvent = require('p-event');
+const request = require('request');
 const spawn = require('child_process').spawn;
 const tmp = require('temp');
 
@@ -60,14 +61,17 @@ function plotArgs (output, width) {
   ];
 }
 
-module.exports = async function (input, output, done) {
+/**
+ * @param {string} inputFile
+ * @param {string} output path to output file
+ */
+async function waveFormImage (input, output) {
   const ffmpegOutput = tmp.path();
-  let width;
-  try {
-    const filename = await _getLocalFile(input);
-    const duration = await _getDuration(filename);
-    width = Math.round(duration * 100);
+  const filename = await _getLocalFile(input);
+  const duration = await _getDuration(filename);
+  const width = Math.round(duration * 100);
 
+  await new Promise((resolve, reject) => {
     const command = ffmpeg()
       .input(filename)
       .withAudioCodec('pcm_s16le')
@@ -77,25 +81,20 @@ module.exports = async function (input, output, done) {
       .withOutputFormat('data')
       .output(ffmpegOutput)
       .on('start', cmd => debug('ffmpeg command: %s', cmd))
-      .on('error', err => done(err))
-      .on('end', ffmpegDone);
+      .on('error', reject)
+      .on('end', resolve);
 
     command.run();
-  } catch (error) {
-    return done(error);
+  });
+
+  const inFile = fs.createReadStream(ffmpegOutput);
+  const plotProc = spawn(gnuplot, plotArgs(output, width), { stdio: ['pipe', process.stdout, process.stdout] });
+  inFile.pipe(plotProc.stdin);
+
+  const code = await pEvent(plotProc, 'exit');
+  if (code !== undefined && code !== 0) {
+    throw new Error('image exited with code: ' + code);
   }
+}
 
-  function ffmpegDone () {
-    const inFile = fs.createReadStream(ffmpegOutput);
-    const plotProc = spawn(gnuplot, plotArgs(output, width), { stdio: ['pipe', process.stdout, process.stdout] });
-    inFile.pipe(plotProc.stdin);
-
-    plotProc.on('exit', (code, signal) => {
-      if (code !== undefined && code !== 0) {
-        return done(new Error('image exited with code: ' + code));
-      }
-
-      done();
-    });
-  }
-};
+module.exports = waveFormImage;

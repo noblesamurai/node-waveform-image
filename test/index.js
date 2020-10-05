@@ -17,47 +17,51 @@ describe('image', function () {
     });
   });
 
-  it('should create a waveform image', done => {
+  it('should create a waveform image', async () => {
     const input = path.join(__dirname, 'fixtures/311.opus');
     const output = path.join(temporaryDir, 'out-311.png');
 
-    image(input, output, err => {
-      if (err) return done(err);
-      // Make sure the output file exists
-      expect(fs.existsSync(output)).to.be(true);
+    await image(input, output);
+    // Make sure the output file exists
+    expect(fs.existsSync(output)).to.be(true);
 
-      // And that it has a size
-      const stats = fs.statSync(output);
-      expect(stats.size).to.be.above(2000);
-
-      done(err);
-    });
+    // And that it has a size
+    const stats = fs.statSync(output);
+    expect(stats.size).to.be.above(2000);
   });
 
-  it('should error cleanly for bad input', done => {
+  it('should error cleanly for bad input', async () => {
     const input = path.join(__dirname, 'fixtures/zero-length.opus');
     const output = path.join(temporaryDir, 'out-zero-length.png');
 
-    image(input, output, err => {
-      expect(err).to.be.ok();
-      expect(err).to.be.an(Error);
-      done();
-    });
+    let error;
+    try {
+      await image(input, output);
+    } catch (error_) {
+      error = error_;
+    }
+
+    expect(error).to.be.ok();
+    expect(error).to.be.an(Error);
   });
 
-  it('should error cleanly for bad input', done => {
+  it('should error cleanly for bad input', async () => {
     // Bad.opus is a blank audio file that has been truncated (ie. only partially there).
     const input = path.join(__dirname, 'fixtures/bad.opus');
     const output = path.join(temporaryDir, 'out-bad.png');
 
-    image(input, output, err => {
-      expect(err).to.be.ok();
-      expect(err).to.be.an(Error);
-      done();
-    });
+    let error;
+    try {
+      await image(input, output);
+    } catch (error_) {
+      error = error_;
+    }
+
+    expect(error).to.be.ok();
+    expect(error).to.be.an(Error);
   });
 
-  it('should create a waveform image from a remote file', done => {
+  it('should create a waveform image from a remote file', async () => {
     const server = http.createServer((request, response) => {
       if (/\.opus$/.test(request.url)) {
         const input = fs.createReadStream(path.join(__dirname, 'fixtures', request.url));
@@ -70,16 +74,12 @@ describe('image', function () {
     const input = 'http://localhost:' + server.address().port + '/311.opus';
     const output = path.join(temporaryDir, 'out.png');
 
-    image(input, output, err => {
-      if (err) return done(err);
-      // Make sure the output file exists
-      expect(fs.existsSync(output)).to.be(true);
+    await image(input, output);
+    // Make sure the output file exists
+    expect(fs.existsSync(output)).to.be(true);
 
-      // And that it has a size
-      const stats = fs.statSync(output);
-      expect(stats.size).to.be.above(2000);
-
-      done(err);
-    });
+    // And that it has a size
+    const stats = fs.statSync(output);
+    expect(stats.size).to.be.above(2000);
   });
 });

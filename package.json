@@ -9,7 +9,7 @@
   "scripts": {
     "coverage": "nyc npm test",
     "pretest": "xo",
-    "test": "mocha --recursive test"
+    "test": "mocha --recursive --exit test"
   },
   "repository": "github:noblesamurai/waveform-image",
   "author": "Tim Allen <tim@noblesamurai.com>",
@@ -20,6 +20,7 @@
     "ffmpeg-static": "^4.2.7",
     "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
+    "p-event": "^4.2.0",
     "request": "^2.88.2",
     "temp": "^0.9.1"
   },
