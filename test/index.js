@@ -1,4 +1,4 @@
-const expect = require('expect.js');
+const expect = require('chai').expect;
 const image = require('..');
 const fs = require('fs');
 const path = require('path');
@@ -23,7 +23,7 @@ describe('image', function () {
 
     await image(input, output);
     // Make sure the output file exists
-    expect(fs.existsSync(output)).to.be(true);
+    expect(fs.existsSync(output)).to.equal(true);
 
     // And that it has a size
     const stats = fs.statSync(output);
@@ -34,15 +34,7 @@ describe('image', function () {
     const input = path.join(__dirname, 'fixtures/zero-length.opus');
     const output = path.join(temporaryDir, 'out-zero-length.png');
 
-    let error;
-    try {
-      await image(input, output);
-    } catch (error_) {
-      error = error_;
-    }
-
-    expect(error).to.be.ok();
-    expect(error).to.be.an(Error);
+    expect(image(input, output)).to.eventually.be.rejectedWith(Error);
   });
 
   it('should error cleanly for bad input', async () => {
@@ -50,15 +42,7 @@ describe('image', function () {
     const input = path.join(__dirname, 'fixtures/bad.opus');
     const output = path.join(temporaryDir, 'out-bad.png');
 
-    let error;
-    try {
-      await image(input, output);
-    } catch (error_) {
-      error = error_;
-    }
-
-    expect(error).to.be.ok();
-    expect(error).to.be.an(Error);
+    expect(image(input, output)).to.eventually.be.rejectedWith(Error);
   });
 
   it('should create a waveform image from a remote file', async () => {
@@ -76,7 +60,7 @@ describe('image', function () {
 
     await image(input, output);
     // Make sure the output file exists
-    expect(fs.existsSync(output)).to.be(true);
+    expect(fs.existsSync(output)).to.equal(true);
 
     // And that it has a size
     const stats = fs.statSync(output);
