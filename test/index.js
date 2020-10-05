@@ -2,18 +2,16 @@ const expect = require('chai').expect;
 const image = require('..');
 const fs = require('fs');
 const path = require('path');
-const temp = require('temp'); // .track();
+const tempy = require('tempy');
+
 let temporaryDir;
 
 describe('image', function () {
   this.timeout(2000);
 
   // Create tmp directory
-  before(done => {
-    temp.mkdir('image', (err, dir) => {
-      temporaryDir = dir;
-      done(err);
-    });
+  before(() => {
+    temporaryDir = tempy.directory();
   });
 
   it('should create a waveform image', async () => {

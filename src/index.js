@@ -2,10 +2,11 @@ const commandExists = require('command-exists').sync;
 const debug = require('debug')('ns-audio:image');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
+const fsPromises = require('fs').promises;
 const gnuplot = commandExists('gnuplot') ? 'gnuplot' : 'gnuplot-nox';
 const pEvent = require('p-event');
 const spawn = require('child_process').spawn;
-const tmp = require('temp');
+const tempy = require('tempy');
 
 ffmpeg.setFfmpegPath(require('ffmpeg-static'));
 ffmpeg.setFfprobePath(require('ffprobe-static').path);
@@ -47,7 +48,7 @@ function plotArgs (output, width) {
  * @param {string} output path to output file
  */
 async function waveFormImage (input, output) {
-  const ffmpegOutput = tmp.path();
+  const ffmpegOutput = tempy.file();
   const duration = await _getDuration(input);
   const width = Math.round(duration * 100);
 
@@ -72,6 +73,12 @@ async function waveFormImage (input, output) {
   inFile.pipe(plotProc.stdin);
 
   const code = await pEvent(plotProc, 'exit');
+  try {
+    await fsPromises.unlink(ffmpegOutput);
+  } catch (error) {
+    console.error(error);
+  }
+
   if (code !== undefined && code !== 0) {
     throw new Error('image exited with code: ' + code);
   }
