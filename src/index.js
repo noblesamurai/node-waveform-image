@@ -8,9 +8,6 @@ const pEvent = require('p-event');
 const spawn = require('child_process').spawn;
 const tempy = require('tempy');
 
-ffmpeg.setFfmpegPath(require('ffmpeg-static'));
-ffmpeg.setFfprobePath(require('ffprobe-static').path);
-
 function _getDuration (filename) {
   return new Promise((resolve, reject) => {
     ffmpeg.ffprobe(filename, (err, metadata) => {
@@ -47,7 +44,11 @@ function plotArgs (output, width) {
  * @param {string} inputFile
  * @param {string} output path to output file
  */
-async function waveFormImage (input, output) {
+async function waveFormImage (input, output, options = {}) {
+  const { ffmpegPath, ffprobePath } = options;
+  ffmpegPath && ffmpeg.setFfmpegPath(ffmpegPath);
+  ffprobePath && ffmpeg.setFfprobePath(ffprobePath);
+
   const ffmpegOutput = tempy.file();
   const duration = await _getDuration(input);
   const width = Math.round(duration * 100);

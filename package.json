@@ -17,8 +17,6 @@
   "dependencies": {
     "command-exists": "^1.2.9",
     "debug": "^4.2.0",
-    "ffmpeg-static": "^4.2.7",
-    "ffprobe-static": "^3.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "p-event": "^4.2.0",
     "tempy": "^0.7.1"
@@ -31,6 +29,8 @@
     "eslint-config-standard": "*",
     "eslint-plugin-node": "*",
     "eslint-plugin-standard": "*",
+    "ffmpeg-static": "^4.2.7",
+    "ffprobe-static": "^3.0.0",
     "mocha": "^7.0.0",
     "nyc": "^15.0.0",
     "xo": "*"
