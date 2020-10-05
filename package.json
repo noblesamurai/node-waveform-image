@@ -11,7 +11,7 @@
     "pretest": "xo",
     "test": "mocha --recursive --exit test"
   },
-  "repository": "github:noblesamurai/waveform-image",
+  "repository": "github:noblesamurai/node-waveform-image",
   "author": "Tim Allen <tim@noblesamurai.com>",
   "license": "BSD-3-Clause",
   "dependencies": {
