@@ -37,16 +37,14 @@ Type: `object`
 
 ##### ffprobePath
 
-Type: `string`
-
+Type: `string`\
 Default: The binary found in the `PATH` will be used.
 
 The path to the `ffprobe` binary to use.
 
 ##### ffmpegPath
 
-Type: `string`
-
+Type: `string`\
 Default: The binary found in the `PATH` will be used.
 
 The path to the `ffmpeg` binary to use.
