@@ -7,26 +7,57 @@
 PLEASE_FILL_IN_HERE
 
 ## Usage
-
 ```js
-// Several examples of usage.
-// Usually copying and pasting code from the tests and making the code standalone suffices.
-// PLEASE_FILL_IN_HERE
+const waveformImage = require('waveform-image');
+
+(async () => {
+	try {
+    // These binaries must exist on the system.  If you don't pass the paths
+    // in, it'll try and use `ffmpeg` and `ffprobe` in the path.
+    const ffmpegPath = '/custom/path/ffmpeg';
+    const ffProbePath = '/custom/path/ffprobe';
+		await waveformImage('/path/to/file.wav', '/path/to/output/image.png', { ffmpegPath, ffprobePath });
+    // '/path/to/output/image.png' should now exist
+	} catch (error) {
+    // something went wrong
+		console.error(error);
+	}
+})();
 ```
+
 
 ## API
 
-PLEASE_FILL_IN_HERE
+### waveformImage(input, output, options?)
 
-Note: To regenerate this section from the jsdoc run `npm run docs` and paste
-the output above.
+Returns a `Promise` that is fulfilled when `output` has been created.
+
+#### options
+
+Type: `object`
+
+##### ffprobePath
+
+Type: `string`
+Default: The binary found in the `PATH` will be used.
+
+The path to the `ffprobe` binary to use.
+
+##### ffmpegPath
+
+Type: `string`
+Default: The binary found in the `PATH` will be used.
+
+The path to the `ffmpeg` binary to use.
 
 ## Installation
 
 This module is installed via npm:
 
+
 ``` bash
 $ npm install waveform-image
+
 ```
 
 ## License
