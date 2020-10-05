@@ -3,8 +3,7 @@
 > Generate a waveform image.
 
 ## Purpose
-- What problem does this module solve? At least a few sentences.
-PLEASE_FILL_IN_HERE
+Generate a PNG file that represents a given waveform graphically.
 
 ## Usage
 ```js
