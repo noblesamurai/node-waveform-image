@@ -1,0 +1,45 @@
+{
+  "name": "waveform-image",
+  "version": "0.0.0",
+  "description": "Generate a waveform image.",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "coverage": "nyc npm test",
+    "pretest": "xo",
+    "test": "mocha --recursive test"
+  },
+  "repository": "github:noblesamurai/waveform-image",
+  "author": "Tim Allen <tim@noblesamurai.com>",
+  "license": "BSD-3-Clause",
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "eslint-config-semistandard": "*",
+    "eslint-config-standard": "*",
+    "eslint-plugin-node": "*",
+    "eslint-plugin-standard": "*",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
+    "xo": "*"
+  },
+  "nyc": {
+    "include": [
+      "src"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
+    "cache": true,
+    "all": true
+  },
+  "xo": {
+    "env": [
+      "mocha"
+    ],
+    "extends": "semistandard"
+  }
+}
