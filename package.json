@@ -51,5 +51,9 @@
       "mocha"
     ],
     "extends": "semistandard"
+  },
+  "optionalDependencies": {
+    "ffmpeg-static": "^4.2.7",
+    "ffprobe-static": "^3.0.0"
   }
 }
