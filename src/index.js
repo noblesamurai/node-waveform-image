@@ -16,15 +16,15 @@ try {
 } catch {
   ffmpegPath = 'ffmpeg';
 }
+
 try {
-  ffprobePath = require('ffprobe-static');
+  ffprobePath = require('ffprobe-static').path;
 } catch {
   ffprobePath = 'ffprobe';
 }
 
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
-
 
 function _getDuration (filename) {
   return new Promise((resolve, reject) => {
