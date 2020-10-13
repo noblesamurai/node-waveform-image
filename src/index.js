@@ -28,7 +28,7 @@ try {
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobePath);
 
-function _getDuration (filename) {
+function getDuration (filename) {
   return new Promise((resolve, reject) => {
     ffmpeg.ffprobe(filename, (err, metadata) => {
       if (err) return reject(err);
@@ -84,7 +84,7 @@ async function generatePCM (input, ffmpegOutput) {
  */
 async function waveFormImage (input, output) {
   const ffmpegOutput = tempy.file();
-  const duration = await _getDuration(input);
+  const duration = await getDuration(input);
   const width = Math.round(duration * 100);
 
   await generatePCM(input, ffmpegOutput);
