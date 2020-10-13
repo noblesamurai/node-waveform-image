@@ -3,7 +3,9 @@ const debug = require('debug')('ns-audio:image');
 const ffmpeg = require('fluent-ffmpeg');
 const fs = require('fs');
 const fsPromises = require('fs').promises;
+const get = require('lodash.get');
 const gnuplot = commandExists('gnuplot') ? 'gnuplot' : 'gnuplot-nox';
+const isFiniteNumber = require('lodash.isfinite');
 const pEvent = require('p-event');
 const spawn = require('child_process').spawn;
 const tempy = require('tempy');
@@ -30,13 +32,13 @@ function _getDuration (filename) {
   return new Promise((resolve, reject) => {
     ffmpeg.ffprobe(filename, (err, metadata) => {
       if (err) return reject(err);
-      const duration = metadata.streams && metadata.streams.length && Number.parseFloat(metadata.streams[0].duration);
-      if (Number.isNaN(duration)) {
+      const duration = get(metadata, 'streams[0].duration');
+      if (!isFiniteNumber(duration)) {
         reject(new Error('failed to parse audio track'));
         return;
       }
 
-      resolve(duration);
+      resolve(Number.parseFloat(duration));
     });
   });
 }
@@ -89,6 +91,7 @@ async function waveFormImage (input, output) {
 
   const code = await pEvent(plotProc, 'exit');
   try {
+    // Clean up temporary file.
     await fsPromises.unlink(ffmpegOutput);
   } catch (error) {
     console.error(error);
