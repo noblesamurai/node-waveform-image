@@ -11,7 +11,7 @@ const waveformImage = require('waveform-image');
 
 (async () => {
 	try {
-      await waveformImage('/path/to/file.wav', '/path/to/output/image.png');
+    await waveformImage('/path/to/file.wav', '/path/to/output/image.png');
     // '/path/to/output/image.png' should now exist
 	} catch (error) {
     // something went wrong
