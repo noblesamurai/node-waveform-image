@@ -60,16 +60,8 @@ function plotArgs (output, width) {
   ];
 }
 
-/**
- * @param {string} inputFile
- * @param {string} output path to output file
- */
-async function waveFormImage (input, output) {
-  const ffmpegOutput = tempy.file();
-  const duration = await _getDuration(input);
-  const width = Math.round(duration * 100);
-
-  await new Promise((resolve, reject) => {
+async function generatePCM (input, ffmpegOutput) {
+  return new Promise((resolve, reject) => {
     const command = ffmpeg()
       .input(input)
       .withAudioCodec('pcm_s16le')
@@ -84,6 +76,18 @@ async function waveFormImage (input, output) {
 
     command.run();
   });
+}
+
+/**
+ * @param {string} inputFile
+ * @param {string} output path to output file
+ */
+async function waveFormImage (input, output) {
+  const ffmpegOutput = tempy.file();
+  const duration = await _getDuration(input);
+  const width = Math.round(duration * 100);
+
+  await generatePCM(input, ffmpegOutput);
 
   const inFile = fs.createReadStream(ffmpegOutput);
   const plotProc = spawn(gnuplot, plotArgs(output, width), { stdio: ['pipe', process.stdout, process.stdout] });
