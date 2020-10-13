@@ -98,7 +98,7 @@ async function waveFormImage (input, output) {
   }
 
   if (code !== undefined && code !== 0) {
-    throw new Error('image exited with code: ' + code);
+    throw new Error('gnuplot exited with code: ' + code);
   }
 }
 
