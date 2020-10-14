@@ -3,30 +3,41 @@
 > Generate a waveform image.
 
 ## Purpose
-- What problem does this module solve? At least a few sentences.
-PLEASE_FILL_IN_HERE
+Generate a PNG file that represents a given waveform graphically.
 
 ## Usage
-
 ```js
-// Several examples of usage.
-// Usually copying and pasting code from the tests and making the code standalone suffices.
-// PLEASE_FILL_IN_HERE
+const waveformImage = require('waveform-image');
+
+(async () => {
+	try {
+    await waveformImage('/path/to/file.wav', '/path/to/output/image.png');
+    // '/path/to/output/image.png' should now exist
+	} catch (error) {
+    // something went wrong
+    console.error(error);
+	}
+})();
 ```
+
+`ffmpeg-static` and `ffprobe-static` are optional dependencies.  If they are not installed, `ffprobe` and `ffmpeg` are
+assumed to exist in the path.
+
 
 ## API
 
-PLEASE_FILL_IN_HERE
+### waveformImage(input, output)
 
-Note: To regenerate this section from the jsdoc run `npm run docs` and paste
-the output above.
+Returns a `Promise` that is fulfilled when `output` has been created.
 
 ## Installation
 
 This module is installed via npm:
 
+
 ``` bash
 $ npm install waveform-image
+
 ```
 
 ## License
