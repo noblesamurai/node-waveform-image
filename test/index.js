@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 const expect = require('chai').expect;
 const image = require('..');
 const fs = require('fs');
@@ -12,7 +13,8 @@ describe('image', () => {
     temporaryDir = tempy.directory();
   });
 
-  it('should create a waveform image', async () => {
+  it('should create a waveform image', async function () {
+    this.timeout(10000);
     const input = path.join(__dirname, 'fixtures/311.opus');
     const output = path.join(temporaryDir, 'out-311.png');
 
