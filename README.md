@@ -40,6 +40,20 @@ $ npm install waveform-image
 
 ```
 
+## Contributing
+
+### Prerequisites
+
+```
+$ pip install pre-commit
+```
+
+### Installation
+
+```
+$ pre-commit install --install-hooks
+```
+
 ## License
 
 The BSD License
